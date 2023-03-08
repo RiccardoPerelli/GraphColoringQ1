@@ -1,0 +1,3 @@
+D:/Università/SDP/s277505GraphColoring/cmake-build-debug/CMakeFiles/s277505GraphColoring.dir
+D:/Università/SDP/s277505GraphColoring/cmake-build-debug/CMakeFiles/edit_cache.dir
+D:/Università/SDP/s277505GraphColoring/cmake-build-debug/CMakeFiles/rebuild_cache.dir

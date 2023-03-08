@@ -1,0 +1,15 @@
+Graph,Vertices,Edges,ColoringAlg,Success,Colors,Time elapsed
+rgg_n_2_18_s0.graph,262144,3094582,Greedy,1,19,767.638
+rgg_n_2_18_s0.graph,262144,3094582,Jones (1 threads),1,19,1028.98
+rgg_n_2_18_s0.graph,262144,3094582,Jones (2 threads),1,19,632.089
+rgg_n_2_18_s0.graph,262144,3094582,Jones (4 threads),1,19,416.536
+rgg_n_2_18_s0.graph,262144,3094582,Jones (8 threads),1,19,319.795
+rgg_n_2_18_s0.graph,262144,3094582,SDL (1 threads),1,19,1064.98
+rgg_n_2_18_s0.graph,262144,3094582,SDL (2 threads),1,19,550.134
+rgg_n_2_18_s0.graph,262144,3094582,SDL (4 threads),1,19,286.605
+rgg_n_2_18_s0.graph,262144,3094582,LDF (1 threads),1,17,2584.26
+rgg_n_2_18_s0.graph,262144,3094582,LDF (2 threads),1,17,1234.22
+rgg_n_2_18_s0.graph,262144,3094582,LDF (4 threads),1,17,608.627
+rgg_n_2_18_s0.graph,262144,3094582,Luby (1 threads),1,19,4364.44
+rgg_n_2_18_s0.graph,262144,3094582,Luby (2 threads),1,19,3952.27
+rgg_n_2_18_s0.graph,262144,3094582,Luby (4 threads),1,19,3366.48
