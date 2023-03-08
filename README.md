@@ -1,77 +1,67 @@
+# Introduction
+This repo contains the source code of the solution for the project *Parallel Graph Coloring*, final project for the exam System and device programming.
+In graph theory, graph coloring is a special case of graph labeling; in which particular labels, traditionally called “colors”, are assigned to elements of a graph subject to certain constraints. The convention of using colors originates from coloring the countries of a map. In its simplest form, it is a way of coloring the vertices of a graph such that no two adjacent vertices are of the same color. This version of the problem is called “vertex coloring”. 
+Graph coloring enjoys many practical applications as well as theoretical challenges. Many graph applications are based on vertex coloring and many graph properties are based on graph coloring. Moreover, vertex coloring is the most famous version of coloring since other coloring problems can be transformed into a vertex coloring instance. 
+Following you can find a little documentation about the classes that compose the project.
+
 # Splitter
-La classe **splitter** serve per creare un range di valori interi. il range sarà utilizzato dai metodi di colorazione,
-in modo tale da spartire i vertici del grafo tra i thread in gioco.
+The **Splitter** class is used to create a range of integer values. This range will be used by the coloring methods, in order to distribute the vertices of the graph among the threads in play.
 
 # ProdConsV
-La classe **ProdConsV** viene utilizzata per creare una struttura che serva da produttore consumatore. Utilizzata in alcuni risolutori per facilitare la sincronizzazione dei thread.
+The **ProdConsV** class is used to create a producer-consumer structure. It is used in some solvers to facilitate thread synchronization.
 
 # DimacsP
-La classe **DimacsP** viene utilizzata per fare il parsing dei file *.graph*, ovvero, leggere questi file in maniera tale da serializzarne
-il contenuto, ed immagazzinarlo in un oggetto C++ (**Graph Class**)
-utilizzato per testare i vari metodi di colorazione.
+The **DimacsP** class is used to parse .graph files, that is, to read these files in such a way as to serialize their contents, and store them in a C++ object (**Graph Class**) used to test the various coloring methods.
 
 # Graph
-La classe **Graph** rappresenta il grafo parsato, all'interno di essa sono presenti i metodi e gli 
-attributi necessari alla manipolazione/colorazione del grafo. Ne facciamo una breve overview:
-1.  *neighbors*, vettore che rappresenta i vicini di un nodo
-2.  *neighbor_indices*, vettore di vicini per ogni nodo.
-3.  *colors*, vettore di colori determina quanti colori utilizzare per quel grafo.
-4.  *deletedVertices*, vettore per mantenere un'informazione circa i vertici eliminati.
-5.  *deletedVerticesCount*, conta il valore dei vertici eliminati, necessario per fare il check se tutti sono stati colorati.
-6.  *bool is_coloring_ok()*, verifica che la colorazione del grafo sia giusta.
-7.  *uint32_t colors_num()*, ritorna il numero di colori del grafo.
-8.  *uint32_t vertices_num() const*, ritorna il numero di vertici.
-9. *color_t color_of(uint32_t v) const*, ritorna il colore di un vertice specifico.
-10. *adjacency_list_t neighbors_of(uint32_t v) const*, ritorna tutti i vicini di un vertice.
-11. *uint32_t degree_of(uint32_t v) const*, ritorna il grado di un vertice (numero di vicini).
-12. *void delete_vertex(uint32_t v)*, elimina un vertice, metodo utile in algoritmi come Luby, dove è presente la necessità di 
-	creare dei subset del grafo per la colorazione in parallelo.
-13. *bool is_deleted(uint32_t v) const*, verifica che uno specifico vertice sia ancora o meno presente nel grafo.
-14. *bool empty() const*, verifica che il grafo in questione sia vuoto, utile per grafi di comodo in algoritmi in cui è necessario creare dei grafi specchio.
-15. *color_t color_with_smallest(uint32_t v)*, colora il vertice V con il minor colore presente.
-17. *void clear()*, resetta il grafo, in modo che possa essere usato da un altro Algoritmo.
+The Graph class represents the parsed graph, and contains the necessary methods and attributes for graph manipulation/coloring. Here's a brief overview:
+
+1. *neighbors*, a vector representing the neighbors of a node.
+2. *neighbor_indices*, a vector of neighbors for each node.
+3. *colors*, a vector of colors that determines how many colors to use for that graph.
+4. *deletedVertices*, a vector for keeping track of information about deleted vertices.
+5. *deletedVerticesCount*, counts the value of deleted vertices, necessary to check if all vertices have been colored.
+6. *bool is_coloring_ok()*, checks that the graph coloring is correct.
+7. *uint32_t colors_num()*, returns the number of colors in the graph.
+8. *uint32_t vertices_num() const*, returns the number of vertices.
+9. *color_t color_of(uint32_t v) const*, returns the color of a specific vertex.
+10. *adjacency_list_t neighbors_of(uint32_t v) const*, returns all the neighbors of a vertex.
+11. *uint32_t degree_of(uint32_t v) const*, returns the degree of a vertex (number of neighbors).
+12. *void delete_vertex(uint32_t v)*, deletes a vertex, a method useful in algorithms such as Luby, where there is a need to create subsets of the graph for parallel coloring.
+13. *bool is_deleted(uint32_t v) const*, checks if a specific vertex is still present in the graph.
+14. *bool empty() const*, checks if the graph in question is empty, useful for convenience graphs in algorithms where it is necessary to create mirror graphs.
+15. *color_t color_with_smallest(uint32_t v)*, colors vertex V with the smallest available color.
+16. *void clear()*, resets the graph, make it usable in different algorithms.
 
 # Solver
-**Solver.h**, fa da classe base per tutti i metodi di colorazione che sono utilizzati.
+**Solver.h**, It serves as a base class for all the coloring methods that are used.
 
 # Benchmark
-**Benchmark**, in questa classe viene immagazzinato tutto il necessario per effettuare i benchmark sui diversi metodi di risoluzione e con diverso numero di thread.
+**Benchmark**, in this class, everything necessary for benchmarking the different resolution methods with different numbers of threads is stored.
 
 # Greedy
-L'algoritmo **Greedy**, banalmente, applica il metodo descritto in allwrigth 1995, praticamente prendo tutti i vertici del mio grafo, ne faccio una permutazione e iterativamente
-scorro tutti i vertici facenti parte della permutazione, e per ognuno di essi (in modo sequenziale) cerco tutti i colori dei suoi vicini e applico al vertice corrente il colore
-minore che posso trovare tra il set di colori disponibili.
+The **Greedy** algorithm, trivially, applies the method described in Allwright 1995. Basically, I take all the vertices of my graph, make a permutation of them, and iteratively go through all the vertices in the permutation. For each vertex (sequentially), I look at all the colors of its neighbors and apply the smallest color that I can find among the available set of colors to the current vertex.
 
 # Jones
-Algoritmo **Jones**, come presentato nel paper allwright1995 implementa un metodo di colorazione basato sul peso dei vertici
-praticamente, viene costruito un indipendent set sfruttando i massimi locali, questi nodi verranno colorati con il minimo
-colore possibile parallelamente e (sempre parallelamente) verranno aggiunti nuovi massimi locali sfruttando una waitList
-che permette di mantenere un'informazione circa quali vertici sono ancora in attesa di essere colorati.
+The **Jones** algorithm, as presented in the Allwright 1995 paper, implements a coloring method based on the weight of the vertices. Essentially, an independent set is constructed by exploiting the local maxima. These nodes will be colored with the minimum possible color in parallel, and (also in parallel) new local maxima will be added using a waitlist that keeps track of which vertices are still waiting to be colored.
 
 # LDF
-Algoritmo **LDF (Largest-degree-first)**, Fondamentalmente uguale al Jones, solo che prima di colorare i vertici assegno ad ogni thread un sotto-set del grafo, e il metodo 
-di colorazione utilizzato è il seguente:
-Per ogni sotto-set faccio un sort che mi permettà di ordinare i vertici per grado, purtroppo, avendo dei set separati per ogni thread questo può generare dei problemi 
-e quindi delle colorazioni errate (perchè il metodo color_with_smallest() non è atomico), quindi è stato aggiunto un pezzo relativo alla correzione dei colori errati.
+The **LDF (Largest-degree-first)** algorithm is fundamentally the same as Jones, only before coloring the vertices, I assign each thread a subset of the graph. The coloring method used is as follows: For each subset, I sort the vertices by degree, unfortunately, having separate sets for each thread can generate problems and therefore incorrect colorings (because the color_with_smallest() method is not atomic). So a piece regarding the correction of incorrect colors has been added.
 
 # SDL
-Algoritmo **SDL (Smallest-degree-last)**, simile al LDF ma con un sistema di weighting migliorato, in particolare l'algoritmo funziona passando attraverso due fasi:
--weighting phase: vengono salvati tutti i gradi dei nodi in un vettore, viene calcolato il grado più alto, per ogni vertice se questo ha un grado minore del grado corrente
-allora assegno al vettore dei pesi in posizione del vertice il peso corrente, poi per ogni vicino riduco il grado di uno.
-Faccio questo fino a che il grado corrente non è uguale al grado max.
--coloring phase: una volta ordinati i vertici in base ai loro pesi (calcolati al passo precedente), per ogni vertice assegno un coloro nello stesso modo dell'algoritmo LDF.
-Infine correggo la colorazione dei vertici errati.
+The **SDL (Smallest-degree-last)** algorithm is similar to LDF but with an improved weighting system. In particular, the algorithm works by passing through two phases:
+
+- Weighting phase: all the node degrees are saved in a vector, the highest degree is calculated, for each vertex if it has a degree smaller than the current degree then I assign the current weight to the weight vector at the position of the vertex, then for each neighbor, I reduce the degree by one. I do this until the current degree is equal to the max degree.
+- Coloring phase: once the vertices are sorted based on their weights (calculated in the previous step), I assign a color to each vertex in the same way as the LDF algorithm. Finally, I correct the coloring of the incorrect vertices.
 
 # Luby
-Algoritmo **Luby**, Creo un grafo non colorato di comodo, per ogni thread eseguo le seguenti istruzioni:
-ogni thread prende la sua parte di grafo su cui dovrà lavorare (come abbiamo visto in precedenza), in questa parte del grafo viene dichiarato un insieme di vertici scelti
-casualmente (sfruttando una distribuzione di bernoulli), in questo modo vengono scelti casualmente i vertici del set da inserire nel sotto-sotto-set.
-Questo viene fatto finchè tutto il sotto-set non viene inserito casualmente in un altro contenitore (una sorta di shuffle dipendente dalla formula di Luby).
-Dopo di che si passa al calcolo del MIS (Maximal Independent set) che viene effettuato come segue: 
-Per ogni vertice verifico che non sia stato eliminato, se no allora aggiungo quel vertice ad un vettore V.
-Dopodiche scorro quel vettore V e ad ogni iterazione seleziono un vertice e rimuovo un ramo.
+The **Luby** algorithm creates a convenient uncolored graph. For each thread, the following instructions are executed:
 
-# Alcuni Benchamrk
+- Each thread takes its part of the graph on which it will work (as we have seen before), in this part of the graph, a set of vertices is randomly selected (using a Bernoulli distribution), in this way, the vertices of the set are randomly selected to be inserted into the sub-subset.
+- This is done until the entire subset is randomly inserted into another container (a sort of shuffle dependent on the Luby formula).
+- After that, the MIS (Maximal Independent Set) is calculated, which is done as follows: For each vertex, I check if it has not been eliminated, if it has not, then I add that vertex to a vector V. Then I go through that vector V, and at each iteration, I select a vertex and remove a branch.algorithm creates a convenient uncolored graph. For each thread, the following instructions are executed:
+
+# Benchamrks
 ## rgg_n_2_15_s0.graph
 |Graph	            |Vertices|Edges	|ColoringAlg|	Success	|Colors	|Time elapsed|
 |-------------------|--------|------|-----------|-----------|-------|------------|
